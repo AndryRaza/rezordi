@@ -1,0 +1,17 @@
+.vignette-ordi{
+	position:relative
+}
+
+.text-ordi{
+	position:absolute;
+	display:none;
+	height:24px;
+	width:100%  !important;
+	top:90%;
+	left:0;
+	
+}
+.vignette-ordi:hover .text-ordi{
+	display:block;
+}
+
