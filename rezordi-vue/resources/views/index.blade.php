@@ -19,9 +19,6 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Rez'ordi</a>
             <span>
-                <a href="#"><i class="fas fa-columns"></i></a>
-                <a href="#">Test</a>
-                <a href="#">Test</a>
                 <button class="btn btn-primary">Déconnexion</button>
             </span>
         </div>
@@ -37,12 +34,13 @@
 
 
     <!-- JavaScript Bundle with Popper -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://unpkg.com/vue-router@2.0.0/dist/vue-router.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="{{asset('js/script.js')}}"></script>
-
+    
 </body>
 
 </html>

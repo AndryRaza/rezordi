@@ -19,32 +19,57 @@ const TableaudeBord = {
 
         </div>
 
-        <div v-if="form_utilisateur" class="d-flex justify-content-center">
-            <form class="w-50">
+        <div v-if="form_utilisateur" class="d-flex justify-content-center ">
+            <form class="w-50 border border-2 border-secondary p-3 rounded">
                 <h2> Formulaire d'ajout d'un utilisateur </h2>
                 <div class="mb-3 form-floating">
                     <input v-model="form_nom" type="text" class="form-control" name="nom" id="nom" placeholder="Nom " required pattern="[A-Za-z]+" minlength="3" maxlength="255">
-                    <label class="form-label" for="nom">Nom</label>
+                    <label class="form-label" for="nom">Nom*</label>
+                    <div v-for="erreur in erreurs">
+                        <span v-if="erreur.nom" class="text-danger">
+                            {{erreur.nom[0]}}
+                        </span>
+                    </div>
                 </div>
 
                 <div class="mb-3 form-floating">
                     <input v-model="form_prenom" type="text" class="form-control" name="prenom" id="prenom" placeholder="Prénom" required pattern="[A-Za-z-]+" minlength="3" maxlength="255">
-                    <label class="form-label" for="prenom">Prénom</label>
+                    <label class="form-label" for="prenom">Prénom*</label>
+                    <div v-for="erreur in erreurs">
+                        <span v-if="erreur.prenom" class="text-danger">
+                            {{erreur.prenom[0]}}
+                        </span>
+                    </div>
                 </div>
 
                 <div class="mb-3 form-floating">
                     <input v-model="form_email" type="email" class="form-control" name="email" id="email" placeholder="nom.prenom@mail.fr">
                     <label class="form-label" for="email">Email</label>
+                    <div v-for="erreur in erreurs">
+                        <span v-if="erreur.email" class="text-danger">
+                            {{erreur.email[0]}}
+                        </span>
+                    </div>
                 </div>
 
                 <div class="mb-3 form-floating">
-                    <input v-model="form_telephone" type="phone" class="form-control" name="phone" id="phone" placeholder="0692152585" >
-                    <label class="form-label" for="phone">Téléphone</label>
+                    <input v-model="form_telephone" type="text" class="form-control" name="telephone" id="telephone" placeholder="0692152585" >
+                    <label class="form-label" for="telephone">Téléphone</label>
+                    <div v-for="erreur in erreurs">
+                        <span v-if="erreur.telephone" class="text-danger">
+                            {{erreur.telephone[0]}}
+                        </span>
+                    </div>
                 </div>
+    
+                <p class="text-muted">Les champs suivis d'un * sont obligatoires.</p>
 
                 <span class="d-flex justify-content-end">
-                 <button v-on:click="ajout_utilisateur" class="btn btn-danger">Annuler</button>
+                 <button v-on:click="ajout_utilisateur" class="btn btn-danger mx-3">Annuler</button>
+                 <button type="button" v-on:click="envoi_utilisateur" class="btn btn-primary">Ajouter</button>
                 </span>
+
+                
 
             </form>
         </div>
@@ -180,6 +205,32 @@ const TableaudeBord = {
 
 
           </table>
+
+
+        <div class="position-fixed bottom-0 end-0 p-3 " style="z-index: 5">
+            <div id="toast_success_ordinateur" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header alert-success">
+                    <strong class="me-auto">Ajout réussi</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body alert-success">
+                    Un nouveau poste a été ajouté !
+                </div>
+            </div>
+        </div>
+
+        <div class="position-fixed bottom-0 end-0 p-3 " style="z-index: 5">
+            <div id="toast_success_utilisateur" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header alert-success">
+                    <strong class="me-auto">Ajout réussi</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body alert-success">
+                    L'utilisateur a été ajouté !
+                </div>
+            </div>
+        </div>
+
   </section>
     
     `,
@@ -189,13 +240,16 @@ const TableaudeBord = {
             postes: [],
             utilisateurs: [],
             details: [],
+            erreurs: [],
+            erreur_telephone: null,
             affichage: 10,
-            searchUser:'',
-            form_utilisateur:false,
-            form_nom:'',
-            form_prenom:'',
-            form_email:'',
-            form_telephone:''
+            searchUser: '',
+            form_utilisateur: false,
+            form_reservation: false,
+            form_nom: '',
+            form_prenom: '',
+            form_email: '',
+            form_telephone: null
             // Details : Array pour mettre les id qu'on souhaite voir en détails (utilisateurs)
             //Affichage : Le nbre d'utilisateurs qu'on souhaite afficher
             //searchUser: L'utilisateur qu'on souhaite rechercher
@@ -205,10 +259,10 @@ const TableaudeBord = {
     computed: {
         utilisateurs_func() {
             let tab = this.utilisateurs.filter((user) => {
-                return (user.nom.toLowerCase().includes(this.searchUser.toLowerCase()) || user.prenom.toLowerCase().includes(this.searchUser.toLowerCase())  );
+                return (user.nom.toLowerCase().includes(this.searchUser.toLowerCase()) || user.prenom.toLowerCase().includes(this.searchUser.toLowerCase()));
             });
 
-            return tab.slice(0,this.affichage);
+            return tab.slice(0, this.affichage);
         },
         postes_func() {
             return this.postes;
@@ -225,24 +279,54 @@ const TableaudeBord = {
                 //on accepte tous les id différent de l'id qu'on souhaite retirer
             }
         },
-        ajout_ordi(){
+        ajout_ordi() {
             axios
-            .post('/ajout_ordinateur')
-            .then(response => {
-                this.postes.push(response.data);
-            })
-            .catch(error => {
-                console.log(error);
-            })
+                .post('/ajout_ordinateur')
+                .then(response => {
+                    this.postes.push(response.data);
+                    $('#toast_success_ordinateur').toast('show');
+                })
+                .catch(error => {
+                    console.log(error);
+                })
         },
-        ajout_utilisateur(){
-            if (this.form_utilisateur)
-            {
+        ajout_utilisateur() {
+            if (this.form_utilisateur) {
                 this.form_utilisateur = false;
             }
             else {
                 this.form_utilisateur = true;
             }
+        },
+        envoi_utilisateur() {
+            axios
+                .post('/store_user', {
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    nom: this.form_nom,
+                    prenom: this.form_prenom,
+                    email: this.form_email,
+                    telephone: this.form_telephone
+                })
+                .then(response => {
+                    if (response.data[0] === 'succes') {
+                        this.utilisateurs.push(response.data[1]);
+                        this.form_nom = '';
+                        this.form_prenom = '';
+                        this.form_email = '';
+                        this.form_telephone = '';
+                        $('#toast_success_utilisateur').toast('show');
+                    }
+                    if (response.data[0] === 'erreur')
+                    {     
+                        this.erreurs = [];
+                        this.erreurs.push(JSON.parse(response.data[1]));
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
         }
     },
 
