@@ -30,7 +30,7 @@
                     <div class="mb-3">
                         <div class="row row-cols-2">
                             <div class="col px-2">
-                                <label class="form-label" for="date">Début</label>
+                                <label class="form-label" for="heure_debut">Début</label>
                                 <select class="form-control" name="heure_debut" id="heure_debut">
                                     @for($i = 6;$i < 24;$i++) <option value="{{$i < 10 ? '0'.$i : $i}}">{{$i < 10 ? '0'.$i.'h' : $i.'h'}}</option>
                                         @endfor
@@ -54,7 +54,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label" for="date">Utilisateur</label>
+                        <label class="form-label" for="utilisateur">Utilisateur</label>
                         <select class="form-control" name="utilisateur" id="utilisateur">
                             @foreach($utilisateurs as $utilisateur)
                             <option value="{{$utilisateur->id}}">{{$utilisateur->nom . ' '. $utilisateur->prenom}} </option>

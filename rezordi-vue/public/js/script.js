@@ -1,7 +1,6 @@
 const TableaudeBord = {
     template: `
     <section class="container">
-
         <div class="d-flex justify-content-center align-items-center mb-4">
 
             <button v-on:click="ajout_utilisateur" class="btn border border-3 border-dark rounded m-auto" > Ajouter un utilisateur <br /> 
@@ -79,6 +78,11 @@ const TableaudeBord = {
                 <div class="mb-3 form-floating">
                     <input v-model="form_date" type="date" class="form-control" name="date" id="date" placeholder="Date" required>
                     <label class="form-label" for="date">Date</label>
+                    <div v-for="erreur in erreurs">
+                        <span v-if="erreur.date" class="text-danger">
+                            {{erreur.date[0]}}
+                        </span>
+                    </div>
                 </div>
                 
                 <div class="mb-3">
@@ -87,18 +91,61 @@ const TableaudeBord = {
                         <div class="col px-2">
                             <label class="form-label" for="heure_debut">Début</label>
                             <select v-model="form_heure_debut" class="form-control" name="heure_debut" id="heure_debut">
-                                    <option v-for="i in heures"> {{i.heure}}h </option>
+                                    <option v-for="i in heures" v-bind:value="i.heure"> {{i.heure}}h</option>
                             </select>
+                            <div v-for="erreur in erreurs">
+                                <span v-if="erreur.heure_debut" class="text-danger">
+                                    {{erreur.heure_debut[0]}}
+                                </span>
+                            </div>
                         </div>
 
                         <div class="col px-2">
                             <label class="form-label" for="heure_fin">Fin</label>
                             <select v-model="form_heure_fin" class="form-control" name="heure_fin" id="heure_fin">
-                                    <option v-for="i in heures"> {{i.heure}}h </option>
+                                    <option v-for="i in heures" v-bind:value="i.heure">{{i.heure}}h</option>
                             </select>
+                            <div v-for="erreur in erreurs">
+                                <span v-if="erreur.heure_fin" class="text-danger">
+                                    {{erreur.heure_fin[0]}}
+                                </span>
+                            </div>
                         </div>
+
                     </div>
                 </div>
+
+
+                <div class="mb-3 form-floating">
+                    <select v-model="form_utilisateur_reservation" class="form-control" name="utilisateur" id="utilisateur">
+                        <option v-for="utilisateur, id in utilisateurs" v-bind:value="utilisateur.id"> {{utilisateur.nom}} {{utilisateur.prenom}} </option>
+                    </select>
+                    <label class="form-label" for="utilisateur">Utilisateur</label>
+                    <div v-for="erreur in erreurs">
+                        <span v-if="erreur.utilisateur" class="text-danger">
+                            {{erreur.utilisateur[0]}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="mb-3 form-floating">
+                    <select v-model="form_poste_reservation" class="form-control" name="poste">
+                        <option v-for="poste,id in postes"  v-bind:value="poste.id">{{poste.id}}</option>
+                    </select>
+                    <label class="form-label" for="poste">Poste n°</label>
+                    <div v-for="erreur in erreurs">
+                        <span v-if="erreur.poste" class="text-danger">
+                            {{erreur.poste[0]}}
+                        </span>
+                    </div>
+                </div>
+
+                <p class="text-muted">Tous les champs sont obligatoires.</p>
+
+                <span class="d-flex justify-content-end">
+                    <button v-on:click="ajout_reservation" class="btn btn-danger mx-3">Annuler</button>
+                    <button type="button" v-on:click="envoi_reservation" class="btn btn-primary">Ajouter</button>
+                </span>
 
             </form>
         </div>
@@ -260,6 +307,30 @@ const TableaudeBord = {
             </div>
         </div>
 
+        <div class="position-fixed bottom-0 end-0 p-3 " style="z-index: 5">
+            <div id="toast_success_reservation" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header alert-success">
+                    <strong class="me-auto">Ajout réussi</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body alert-success">
+                    La réservation a été ajoutée !
+                </div>
+            </div>
+        </div>
+
+        <div class="position-fixed bottom-0 end-0 p-3 " style="z-index: 5">
+            <div id="toast_fail_reservation" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header ">
+                    <strong class="me-auto">Problème</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body alert-danger">
+                    Ce créneau horaire est déjà réservé pour cette date et ce poste !
+                </div>
+            </div>
+        </div>
+
   </section>
     
     `,
@@ -279,11 +350,11 @@ const TableaudeBord = {
             form_prenom: '',
             form_email: '',
             form_telephone: null,
-            form_date:'',
-            form_heure_debut:'',
-            form_heure_fin:'',
-            form_utilisateur_reservation:'',
-            form_poste_reservation:''
+            form_date: '',
+            form_heure_debut: '',
+            form_heure_fin: '',
+            form_utilisateur_reservation: '',
+            form_poste_reservation: ''
             // Details : Array pour mettre les id qu'on souhaite voir en détails (utilisateurs)
             //Affichage : Le nbre d'utilisateurs qu'on souhaite afficher
             //searchUser: L'utilisateur qu'on souhaite rechercher
@@ -303,11 +374,11 @@ const TableaudeBord = {
         },
         heures() {
             let heures = [];
-            for(i=0;i<24;i++){
+            for (i = 6; i < 24; i++) {
                 if (i < 10) {
-                    heures.push({id:i, heure:'0'+i});
+                    heures.push({ id: i, heure: '0' + i });
                 }
-                else {heures.push({id:i, heure:i}); }
+                else { heures.push({ id: i, heure: '' + i }); }
             }
             return heures;
         }
@@ -370,8 +441,42 @@ const TableaudeBord = {
                         this.form_telephone = '';
                         $('#toast_success_utilisateur').toast('show');
                     }
-                    if (response.data[0] === 'erreur')
-                    {     
+                    if (response.data[0] === 'erreur') {
+                        this.erreurs = [];
+                        this.erreurs.push(JSON.parse(response.data[1]));
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        envoi_reservation() {
+            axios
+                .post('/store_reservation', {
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    date: this.form_date,
+                    heure_debut: this.form_heure_debut,
+                    heure_fin: this.form_heure_fin,
+                    utilisateur: this.form_utilisateur_reservation,
+                    poste: this.form_poste_reservation
+                })
+                .then(response => {
+                    if (response.data === 'erreur_creneau_pris')
+                    {
+                        this.form_date = '';
+                        $('#toast_fail_reservation').toast('show');
+                    }
+                    if (response.data[0] === 'succes') {
+                        this.form_date = '';
+                        this.form_heure_debut = '';
+                        this.form_heure_fin = '';
+                        this.form_utilisateur_reservation = '';
+                        this.form_poste_reservation = '';
+                        $('#toast_success_reservation').toast('show');
+                    }
+                    if (response.data[0] === 'erreur') {
                         this.erreurs = [];
                         this.erreurs.push(JSON.parse(response.data[1]));
                     }
