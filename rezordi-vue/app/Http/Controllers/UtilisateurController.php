@@ -41,7 +41,37 @@ class UtilisateurController extends Controller
            $tab = ['succes',$utilisateur];
            return $tab;
         }
+    }
 
-      
+    public function modification_user(Request $request, $id){
+
+        $validator = FacadesValidator::make($request->all(), [
+            'nom_modification' => 'required|min:3|max:255|regex:/^[A-Za-z . ]+$/',
+            'prenom_modification' => 'required|min:3|max:255|regex:/^[A-Za-z - é è ]+$/',
+            'email_modification'=> 'nullable|email',
+            'telephone_modification'=>'nullable|regex:/^[0-9 - ( ) +]+$/'
+        ]);
+
+        if ($validator->fails()) {
+            $tab = ['erreur', json_encode($validator->errors())];
+            return response()->json($tab);
+        }
+        else {
+           $utilisateur = Utilisateur::find($id);
+           $utilisateur->nom = $request->get('nom_modification');
+           $utilisateur->prenom = $request->get('prenom_modification');
+           $utilisateur->email = $request->get('email_modification');
+           $utilisateur->telephone = $request->get('telephone_modification');
+           $utilisateur->save();
+           $tab = ['succes',$utilisateur];
+           return $tab;
+        }
+    }
+
+    public function suppression($id)
+    {
+        $user = Utilisateur::find($id);
+        $user->delete();
+        return 'ok';
     }
 }

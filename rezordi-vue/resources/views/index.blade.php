@@ -19,7 +19,10 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Rez'ordi</a>
             <span>
-                <button class="btn btn-primary">Déconnexion</button>
+                <form action="/deconnexion" method="POST">
+                @csrf
+                    <button type="submit" class="btn btn-primary">Déconnexion</button>
+                </form>
             </span>
         </div>
     </nav>

@@ -73,10 +73,10 @@ const TableaudeBord = {
 
 
         <div v-if="form_reservation" class="d-flex justify-content-center align-items-center"> 
-            <form class="w-50">  
+            <form class="w-50 border border-2 border-secondary p-3 rounded">  
                 <h2>Ajouter une réservation </h2>
                 <div class="mb-3 form-floating">
-                    <input v-model="form_date" type="date" class="form-control" name="date" id="date" placeholder="Date" required>
+                    <input v-model="form_date" type="date" class="form-control" name="date" id="date" placeholder="Date">
                     <label class="form-label" for="date">Date</label>
                     <div v-for="erreur in erreurs">
                         <span v-if="erreur.date" class="text-danger">
@@ -180,19 +180,15 @@ const TableaudeBord = {
 
                     <p class="text-ordi">
                         <span class="d-flex justify-content-around mb-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-eye"
-                            viewBox="0 0 16 16">
-                            <path
-                                d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
-                            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash"
-                            viewBox="0 0 16 16">
-                            <path
-                                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
-                            <path fill-rule="evenodd"
-                                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
-                            </svg>
+                            <button v-on:click="suppression_ordinateur(poste.id)" class="bg-transparent border border-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-trash pb-2"
+                                viewBox="0 0 16 16">
+                                <path
+                                    d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                <path fill-rule="evenodd"
+                                    d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                                </svg>
+                            </button>
                         </span>
                     </p>
                 </div>
@@ -273,9 +269,60 @@ const TableaudeBord = {
                         </tr>
                         <tr>
                             <td colspan=5>
+
                                 <div v-if="details.includes(id)" class="w-100">
-                                    <h3>Plus de détails </h3>
-                                    <p>Nom: {{utilisateur.nom}} <br /> Prénom: {{utilisateur.prenom}} <br /> Email: {{utilisateur.email}}</p>
+                                    <h3 class="mr-5">Plus de détails</h3>
+                                    <form>
+
+                                        <div class="mb-3 form-floating">
+                                            <input v-model="form_nom_modification = utilisateur.nom" type="text" class="form-control" name="nom_modification" id="nom_modification" placeholder="Nom " required pattern="[A-Za-z . ]+" minlength="3" maxlength="255">
+                                            <label class="form-label" for="nom_modification">Nom*</label>
+                                            <div v-for="erreur in erreurs">
+                                                <span v-if="erreur.nom_modification" class="text-danger">
+                                                    {{erreur.nom_modification[0]}}
+                                                </span>
+                                            </div>
+                                        </div>
+                    
+                                        <div class="mb-3 form-floating">
+                                            <input v-model="form_prenom_modification = utilisateur.prenom" type="text" class="form-control" name="prenom_modification" id="prenom_modification" placeholder="Prénom" required pattern="[A-Za-z-]+" minlength="3" maxlength="255">
+                                            <label class="form-label" for="prenom_modification">Prénom*</label>
+                                            <div v-for="erreur in erreurs">
+                                                <span v-if="erreur.prenom_modification" class="text-danger">
+                                                    {{erreur.prenom_modification[0]}}
+                                                </span>
+                                            </div>
+                                        </div>
+                        
+                                        <div class="mb-3 form-floating">
+                                            <input v-model="form_email_modification = utilisateur.email" type="email" class="form-control" name="email_modification" id="email_modification" placeholder="nom.prenom@mail.fr">
+                                            <label class="form-label" for="email_modification">Email</label>
+                                            <div v-for="erreur in erreurs">
+                                                <span v-if="erreur.email_modification" class="text-danger">
+                                                    {{erreur.email_modification[0]}}
+                                                </span>
+                                            </div>
+                                        </div>
+                    
+                                        <div class="mb-3 form-floating">
+                                            <input v-model="form_telephone_modification = utilisateur.telephone" type="text" class="form-control" name="telephone_modification" id="telephone_modification" placeholder="0692152585" >
+                                            <label class="form-label" for="telephone_modification">Téléphone</label>
+                                            <div v-for="erreur in erreurs">
+                                                <span v-if="erreur.telephone_modification" class="text-danger">
+                                                    {{erreur.telephone_modification[0]}}
+                                                </span>
+                                            </div>
+                                        </div>
+                    
+                                    
+                                        <p class="text-muted">Les champs suivis d'un * sont obligatoires.</p>
+                                        <span class="d-flex justify-content-end">
+                                            <button type="button" v-on:click="suppression_utilisateur(utilisateur.id)" class="btn btn-danger mx-3">Supprimer</button>
+                                            
+                                            <button type="button" v-on:click="envoi_utilisateur_modification(utilisateur.id)" class="btn btn-primary">Modifier</button>
+                                        </span>
+
+                                    </form>                               
                                 </div>
                             </td>
                         </tr>
@@ -484,6 +531,42 @@ const TableaudeBord = {
             </div>
         </div>
 
+        <div class="position-fixed bottom-0 end-0 p-3 " style="z-index: 5">
+            <div id="toast_suppression_utilisateur" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header ">
+                    <strong class="me-auto">Succès</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body alert-success">
+                   L'utilisateur a été supprimé ! 
+                </div>
+            </div>
+        </div>
+
+        <div class="position-fixed bottom-0 end-0 p-3 " style="z-index: 5">
+            <div id="toast_suppression_ordinateur" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header ">
+                    <strong class="me-auto">Succès</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body alert-success">
+                   Le poste a été supprimé ! 
+                </div>
+            </div>
+        </div>
+
+        <div class="position-fixed bottom-0 end-0 p-3 " style="z-index: 5">
+            <div id="toast_success_utilisateur_modification" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header ">
+                    <strong class="me-auto">Succès</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body alert-success">
+                   La modification a été effectuée !
+                </div>
+            </div>
+        </div>
+
   </section>
     
     `,
@@ -504,10 +587,16 @@ const TableaudeBord = {
 
             form_utilisateur: false,
             form_reservation: false,
+
             form_nom: '',
             form_prenom: '',
             form_email: '',
             form_telephone: null,
+
+            form_nom_modification: '',
+            form_prenom_modification: '',
+            form_email_modification: '',
+            form_telephone_modification: null,
 
             form_date: '',
             form_heure_debut: null,
@@ -616,6 +705,7 @@ const TableaudeBord = {
             }
             else {
                 this.form_utilisateur = true;
+                this.form_reservation = false;
             }
         },
         ajout_reservation() {
@@ -624,6 +714,7 @@ const TableaudeBord = {
             }
             else {
                 this.form_reservation = true;
+                this.form_utilisateur = false;
             }
         },
         envoi_utilisateur() {
@@ -690,6 +781,38 @@ const TableaudeBord = {
                     console.log(error);
                 })
         },
+        envoi_utilisateur_modification(id){
+            axios
+            .post('/modification_utilisateur/'+id, {
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                nom_modification : this.form_nom_modification,
+                prenom_modification : this.form_prenom_modification,
+                email_modification : this.form_email_modification,
+                telephone_modification : this.form_telephone_modification,
+            })  
+            .then(response => {
+                if (response.data[0] === 'succes') {
+                    this.form_nom_modification = '';
+                    this.form_prenom_modification = '';
+                    this.form_email_modification = '';
+                    this.form_telephone_modification = '';
+                    $('#toast_success_utilisateur_modification').toast('show');
+                    this.details = [];
+                    this.erreurs = [];
+                }
+                if (response.data[0] === 'erreur') {
+                    this.erreurs = [];
+                    this.erreurs.push(JSON.parse(response.data[1]));
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            })
+            
+        },
+
         envoi_reservation_modification(id){
             axios
             .post('/modification_reservation/'+id, {
@@ -724,6 +847,20 @@ const TableaudeBord = {
                 console.log(error);
             })
         },
+        suppression_utilisateur(id){
+            axios
+            .post('/delete_user/'+id)
+            .then(response => {
+                if (response.data === 'ok')
+                {
+                    this.utilisateurs = this.utilisateurs.filter(res => res.id != id);
+                    $('#toast_suppression_utilisateur').toast('show');
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            })
+        },
         suppression_reservation(id){
             axios
             .post('/delete_reservation/'+id)
@@ -732,6 +869,21 @@ const TableaudeBord = {
                 {
                     this.reservations = this.reservations.filter(res => res.id != id);
                     $('#toast_suppression_creneau').toast('show');
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            })
+        },
+        suppression_ordinateur(id){
+            axios
+            .post('/delete_ordinateur/'+id)
+            .then(response => {
+                if (response.data === 'ok')
+                {
+                    this.postes = this.postes.filter(res => res.id != id);
+                    this.reservations = this.reservations.filter(res => res.poste != id);
+                    $('#toast_suppression_ordinateur').toast('show');
                 }
             })
             .catch(error => {
