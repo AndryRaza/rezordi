@@ -136,7 +136,7 @@ const TableaudeBord = {
 
 
                 <div class="mb-3 form-floating">
-                    <select v-model="form_utilisateur_reservation" class="form-control" name="utilisateur" id="utilisateur">
+                    <select v-model="form_utilisateur_reservation" class="form-control" name="utilisateur" id="utilisateur" autocomplete=on >
                         <option v-for="utilisateur, id in utilisateurs" v-bind:value="utilisateur.id"> {{utilisateur.nom}} {{utilisateur.prenom}} </option>
                     </select>
                     <label class="form-label" for="utilisateur">Utilisateur</label>
@@ -277,222 +277,225 @@ const TableaudeBord = {
 
                 </div>
 
-                <table class="table">
+                <div class="table-responsive">
+                    <table class="table">
 
-                    <thead class="py-5" style="background-color:black;color:white;font-size:20px;">
-                        <th>#</th>
-                        <th>Nom</th>
-                        <th>Prénom</th>
-                        <th>Inscrit le</th>
-                        <th>Voir</th>
-                    </thead>
+                        <thead class="py-5" style="background-color:black;color:white;font-size:20px;">
+                            <th>#</th>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Inscrit le</th>
+                            <th>Voir</th>
+                        </thead>
 
-                    <tbody v-for="utilisateur,id in utilisateurs_func" v-bind:key="utilisateur.id" >
+                        <tbody v-for="utilisateur,id in utilisateurs_func" v-bind:key="utilisateur.id" >
 
-                        <tr>
-                        <td>{{utilisateur.id}}</td>
-                        <td>{{utilisateur.nom}}</td>
-                        <td>{{utilisateur.prenom}}</td>
-                        <td>{{utilisateur.created_at}}</td>
-                        <td><button v-on:click="openDetail(id)" class="btn btn-primary"> + de détails </button></td>
-                        </tr>
-                        <tr>
-                            <td colspan=5>
+                            <tr>
+                            <td>{{utilisateur.id}}</td>
+                            <td>{{utilisateur.nom}}</td>
+                            <td>{{utilisateur.prenom}}</td>
+                            <td>{{utilisateur.created_at}}</td>
+                            <td><button v-on:click="openDetail(id)" class="btn btn-primary"> + de détails </button></td>
+                            </tr>
+                            <tr>
+                                <td colspan=5>
 
-                                <div v-if="details.includes(id)" class="w-100">
-                                    <h3 class="mr-5">Plus de détails</h3>
-                                    <form>
+                                    <div v-if="details.includes(id)" class="w-100">
+                                        <h3 class="mr-5">Plus de détails</h3>
+                                        <form>
 
-                                        <div class="mb-3 form-floating">
-                                            <input v-model="form_nom_modification = utilisateur.nom" type="text" class="form-control" name="nom_modification" id="nom_modification" placeholder="Nom " required pattern="[A-Za-z . ]+" minlength="3" maxlength="255">
-                                            <label class="form-label" for="nom_modification">Nom*</label>
-                                            <div v-for="erreur in erreurs">
-                                                <span v-if="erreur.nom_modification" class="text-danger">
-                                                    {{erreur.nom_modification[0]}}
-                                                </span>
+                                            <div class="mb-3 form-floating">
+                                                <input v-model="form_nom_modification = utilisateur.nom" type="text" class="form-control" name="nom_modification" id="nom_modification" placeholder="Nom " required pattern="[A-Za-z . ]+" minlength="3" maxlength="255">
+                                                <label class="form-label" for="nom_modification">Nom*</label>
+                                                <div v-for="erreur in erreurs">
+                                                    <span v-if="erreur.nom_modification" class="text-danger">
+                                                        {{erreur.nom_modification[0]}}
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
-                    
-                                        <div class="mb-3 form-floating">
-                                            <input v-model="form_prenom_modification = utilisateur.prenom" type="text" class="form-control" name="prenom_modification" id="prenom_modification" placeholder="Prénom" required pattern="[A-Za-z-]+" minlength="3" maxlength="255">
-                                            <label class="form-label" for="prenom_modification">Prénom*</label>
-                                            <div v-for="erreur in erreurs">
-                                                <span v-if="erreur.prenom_modification" class="text-danger">
-                                                    {{erreur.prenom_modification[0]}}
-                                                </span>
-                                            </div>
-                                        </div>
                         
-                                        <div class="mb-3 form-floating">
-                                            <input v-model="form_email_modification = utilisateur.email" type="email" class="form-control" name="email_modification" id="email_modification" placeholder="nom.prenom@mail.fr">
-                                            <label class="form-label" for="email_modification">Email</label>
-                                            <div v-for="erreur in erreurs">
-                                                <span v-if="erreur.email_modification" class="text-danger">
-                                                    {{erreur.email_modification[0]}}
-                                                </span>
+                                            <div class="mb-3 form-floating">
+                                                <input v-model="form_prenom_modification = utilisateur.prenom" type="text" class="form-control" name="prenom_modification" id="prenom_modification" placeholder="Prénom" required pattern="[A-Za-z-]+" minlength="3" maxlength="255">
+                                                <label class="form-label" for="prenom_modification">Prénom*</label>
+                                                <div v-for="erreur in erreurs">
+                                                    <span v-if="erreur.prenom_modification" class="text-danger">
+                                                        {{erreur.prenom_modification[0]}}
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
-                    
-                                        <div class="mb-3 form-floating">
-                                            <input v-model="form_telephone_modification = utilisateur.telephone" type="text" class="form-control" name="telephone_modification" id="telephone_modification" placeholder="0692152585" >
-                                            <label class="form-label" for="telephone_modification">Téléphone</label>
-                                            <div v-for="erreur in erreurs">
-                                                <span v-if="erreur.telephone_modification" class="text-danger">
-                                                    {{erreur.telephone_modification[0]}}
-                                                </span>
+                            
+                                            <div class="mb-3 form-floating">
+                                                <input v-model="form_email_modification = utilisateur.email" type="email" class="form-control" name="email_modification" id="email_modification" placeholder="nom.prenom@mail.fr">
+                                                <label class="form-label" for="email_modification">Email</label>
+                                                <div v-for="erreur in erreurs">
+                                                    <span v-if="erreur.email_modification" class="text-danger">
+                                                        {{erreur.email_modification[0]}}
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
-                    
-                                    
-                                        <p class="text-muted">Les champs suivis d'un * sont obligatoires.</p>
-                                        <span class="d-flex justify-content-end">
-                                            <button type="button" v-on:click="suppression_utilisateur(utilisateur.id)" class="btn btn-danger mx-3">Supprimer</button>
-                                            
-                                            <button type="button" v-on:click="envoi_utilisateur_modification(utilisateur.id)" class="btn btn-primary">Modifier</button>
-                                        </span>
+                        
+                                            <div class="mb-3 form-floating">
+                                                <input v-model="form_telephone_modification = utilisateur.telephone" type="text" class="form-control" name="telephone_modification" id="telephone_modification" placeholder="0692152585" >
+                                                <label class="form-label" for="telephone_modification">Téléphone</label>
+                                                <div v-for="erreur in erreurs">
+                                                    <span v-if="erreur.telephone_modification" class="text-danger">
+                                                        {{erreur.telephone_modification[0]}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                        
+                                        
+                                            <p class="text-muted">Les champs suivis d'un * sont obligatoires.</p>
+                                            <span class="d-flex justify-content-end">
+                                                <button type="button" v-on:click="suppression_utilisateur(utilisateur.id)" class="btn btn-danger mx-3">Supprimer</button>
+                                                
+                                                <button type="button" v-on:click="envoi_utilisateur_modification(utilisateur.id)" class="btn btn-primary">Modifier</button>
+                                            </span>
 
-                                    </form>                               
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
+                                        </form>                               
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
 
             <div class="tab-pane fade border border-1 border-secondary rounded py-2 px-1" id="reservations" role="tabpanel" aria-labelledby="reservations-tab">
-            <h2>Liste des réservations</h2>
+                <h2>Liste des réservations</h2>
 
-            <div class="row row-cols-2 my-3">
+                <div class="row row-cols-2 my-3">
 
-                <div class="col d-flex justify-content-start">
-                    <label for="select" class="form-label mt-1 mx-2">Affichage : </label>
-                    <select v-model="affichage_reservation" class="form-control w-50 h-100 mx-2" id="select">
-                        <option v-bind:value="reservations.length">Tout montrer</option>
-                        <option value="10">10</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
+                    <div class="col d-flex justify-content-start">
+                        <label for="select" class="form-label mt-1 mx-2">Affichage : </label>
+                        <select v-model="affichage_reservation" class="form-control w-50 h-100 mx-2" id="select">
+                            <option v-bind:value="reservations.length">Tout montrer</option>
+                            <option value="10">10</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
 
-                    <input v-model="today" type="checkbox" class="btn-check mx-2" id="today" autocomplete="off">
-                    <label class="btn btn-outline-secondary" for="today">Aujourd'hui</label>
+                        <input v-model="today" type="checkbox" class="btn-check mx-2" id="today" autocomplete="off">
+                        <label class="btn btn-outline-secondary" for="today">Aujourd'hui</label>
+
+                    </div>
+
+                    <div class="col d-flex justify-content-end">
+                        <label class="form-label mt-1 mx-3"  for="search_">Recherche : </label>
+                        <input v-model="searchReservation" class="form-control w-50 h-100 " type="search" id="search_"/>
+                    </div>
 
                 </div>
 
-                <div class="col d-flex justify-content-end">
-                    <label class="form-label mt-1 mx-3"  for="search_">Recherche : </label>
-                    <input v-model="searchReservation" class="form-control w-50 h-100 " type="search" id="search_"/>
-                </div>
+                <div class="table-responsive">
+                    <table class="table" >
+                        <thead style="background-color:black;color:white;font-size:20px;"> 
+                            <th>#</th>
+                            <th>Utilisateur</th>
+                            <th>Date (AAAA-MM-JJ)</th>
+                            <th>Début</th>
+                            <th>Fin</th>
+                            <th>Poste</th>
+                            <th></th>
+                            <th></th>
+                        </thead>
 
-            </div>
-
-            <table class="table" >
-                <thead style="background-color:black;color:white;font-size:20px;"> 
-                    <th>#</th>
-                    <th>Utilisateur</th>
-                    <th>Date (AAAA-MM-JJ)</th>
-                    <th>Début</th>
-                    <th>Fin</th>
-                    <th>Poste</th>
-                    <th></th>
-                    <th></th>
-                </thead>
-
-                <tbody v-for="reservation,id in reservations_func" v-bind:key="reservation.id">
-                    <tr> 
-                        <td>{{reservation.id}} </td>
-                        <td>{{reservation.nom}}{{reservation.prenom}} </td>
-                        <td>{{reservation.date}} </td>
-                        <td>{{reservation.heure_debut}} </td>
-                        <td>{{reservation.heure_fin}} </td>
-                        <td>{{reservation.poste}} </td>
-                        <td><button v-on:click="openModificationReservation(reservation.id)" class="btn btn-primary"> Modifier </button></td>
-                        <td><button v-on:click="suppression_reservation(reservation.id)" class="btn btn-danger"> Supprimer </button></td>
-                    </tr>
-                    <tr>
-                    <td colspan=8>
-                        <div v-if="modification_reservation.includes(reservation.id)" class="">
-                        
-                            <form class="w-100">  
-                                <h3>Modifier </h3>
-                                <div class="mb-3 form-floating">
-                                    <input v-model="form_date_modification=reservation.date" type="date" class="form-control" name="date" id="date_modification" placeholder="Date" required>
-                                    <label class="form-label" for="date_modification">Date</label>
-                                    <div v-for="erreur in erreurs">
-                                        <span v-if="erreur.date_modification" class="text-danger">
-                                            {{erreur.date_modification[0]}}
-                                        </span>
-                                    </div>
-                                </div>
-                        
-                                <div class="mb-3">
-                                    <div class="row row-cols-2">
-                            
-                                        <div class="col px-2">
-                                            <label class="form-label" for="heure_debut">Début</label>
-                                            <select v-model="form_heure_debut_modification" class="form-control" name="heure_debut" id="heure_debut_modification">
-                                                    <option v-for="i in heures" v-bind:value="i.heure" > {{i.heure}}h</option>
-                                            </select>
+                        <tbody v-for="reservation,id in reservations_func" v-bind:key="reservation.id">
+                            <tr> 
+                                <td>{{reservation.id}} </td>
+                                <td>{{reservation.nom}}{{reservation.prenom}} </td>
+                                <td>{{reservation.date}} </td>
+                                <td>{{reservation.heure_debut}} </td>
+                                <td>{{reservation.heure_fin}} </td>
+                                <td>{{reservation.poste}} </td>
+                                <td><button v-on:click="openModificationReservation(reservation.id)" class="btn btn-primary"> Modifier </button></td>
+                                <td><button v-on:click="suppression_reservation(reservation.id)" class="btn btn-danger"> Supprimer </button></td>
+                            </tr>
+                            <tr>
+                            <td colspan=8>
+                                <div v-if="modification_reservation.includes(reservation.id)" class="">
+                                
+                                    <form class="w-100">  
+                                        <h3>Modifier </h3>
+                                        <div class="mb-3 form-floating">
+                                            <input v-model="form_date_modification=reservation.date" type="date" class="form-control" name="date" id="date_modification" placeholder="Date" required>
+                                            <label class="form-label" for="date_modification">Date</label>
                                             <div v-for="erreur in erreurs">
-                                                <span v-if="erreur.heure_debut_modification" class="text-danger">
-                                                    {{erreur.heure_debut_modification[0]}}
+                                                <span v-if="erreur.date_modification" class="text-danger">
+                                                    {{erreur.date_modification[0]}}
                                                 </span>
-                                            </div>  
+                                            </div>
+                                        </div>
+                                
+                                        <div class="mb-3">
+                                            <div class="row row-cols-2">
+                                    
+                                                <div class="col px-2">
+                                                    <label class="form-label" for="heure_debut">Début</label>
+                                                    <select v-model="form_heure_debut_modification" class="form-control" name="heure_debut" id="heure_debut_modification">
+                                                            <option v-for="i in heures" v-bind:value="i.heure" > {{i.heure}}h</option>
+                                                    </select>
+                                                    <div v-for="erreur in erreurs">
+                                                        <span v-if="erreur.heure_debut_modification" class="text-danger">
+                                                            {{erreur.heure_debut_modification[0]}}
+                                                        </span>
+                                                    </div>  
+                                                </div>
+
+                                                <div class="col px-2">
+                                                    <label class="form-label" for="heure_fin_modification">Fin</label>
+                                                    <select v-model="form_heure_fin_modification" class="form-control" name="heure_fin" id="heure_fin_modification">
+                                                            <option v-for="i in heures" v-bind:value="i.heure">{{i.heure}}h</option>
+                                                    </select>
+                                                    <div v-for="erreur in erreurs">
+                                                        <span v-if="erreur.heure_fin_modification" class="text-danger">
+                                                            {{erreur.heure_fin_modification[0]}}
+                                                        </span>
+                                                    </div> 
+                                                </div>
+
+                                            </div>
                                         </div>
 
-                                        <div class="col px-2">
-                                            <label class="form-label" for="heure_fin_modification">Fin</label>
-                                            <select v-model="form_heure_fin_modification" class="form-control" name="heure_fin" id="heure_fin_modification">
-                                                    <option v-for="i in heures" v-bind:value="i.heure">{{i.heure}}h</option>
+
+                                        <div class="mb-3 form-floating">
+                                            <select v-model="form_utilisateur_reservation_modification = reservation.utilisateur_id" class="form-control" name="utilisateur" id="utilisateur_modification">
+                                                <option v-for="utilisateur, id in utilisateurs" v-bind:value="utilisateur.id"> {{utilisateur.nom}} {{utilisateur.prenom}} </option>
                                             </select>
+                                            <label class="form-label" for="utilisateur_modification">Utilisateur</label>
                                             <div v-for="erreur in erreurs">
-                                                <span v-if="erreur.heure_fin_modification" class="text-danger">
-                                                    {{erreur.heure_fin_modification[0]}}
+                                                <span v-if="erreur.utilisateur_modification" class="text-danger">
+                                                    {{erreur.utilisateur_modification[0]}}
                                                 </span>
                                             </div> 
                                         </div>
 
-                                    </div>
-                                </div>
+                                        <div class="mb-3 form-floating">
+                                            <select v-model="form_poste_reservation_modification = reservation.poste" class="form-control" name="poste" id="poste_modification">
+                                                <option v-for="poste,id in postes"  v-bind:value="poste.id">{{poste.id}}</option>
+                                            </select>
+                                            <label class="form-label" for="poste_modification">Poste n°</label>
+                                            <div v-for="erreur in erreurs">
+                                                <span v-if="erreur.poste_modification" class="text-danger">
+                                                    {{erreur.poste_modification[0]}}
+                                                </span>
+                                            </div>
+                                        </div>
 
 
-                                <div class="mb-3 form-floating">
-                                    <select v-model="form_utilisateur_reservation_modification = reservation.utilisateur_id" class="form-control" name="utilisateur" id="utilisateur_modification">
-                                        <option v-for="utilisateur, id in utilisateurs" v-bind:value="utilisateur.id"> {{utilisateur.nom}} {{utilisateur.prenom}} </option>
-                                    </select>
-                                    <label class="form-label" for="utilisateur_modification">Utilisateur</label>
-                                    <div v-for="erreur in erreurs">
-                                        <span v-if="erreur.utilisateur_modification" class="text-danger">
-                                            {{erreur.utilisateur_modification[0]}}
+                                        <span class="d-flex justify-content-end">
+                                            <button type="button" v-on:click="envoi_reservation_modification(reservation.id)" class="btn btn-primary">Modifier</button>
                                         </span>
-                                    </div> 
+
+                                    </form>
                                 </div>
-
-                                <div class="mb-3 form-floating">
-                                    <select v-model="form_poste_reservation_modification = reservation.poste" class="form-control" name="poste" id="poste_modification">
-                                        <option v-for="poste,id in postes"  v-bind:value="poste.id">{{poste.id}}</option>
-                                    </select>
-                                    <label class="form-label" for="poste_modification">Poste n°</label>
-                                    <div v-for="erreur in erreurs">
-                                        <span v-if="erreur.poste_modification" class="text-danger">
-                                            {{erreur.poste_modification[0]}}
-                                        </span>
-                                    </div>
-                                </div>
-
-
-                                <span class="d-flex justify-content-end">
-                                    <button type="button" v-on:click="envoi_reservation_modification(reservation.id)" class="btn btn-primary">Modifier</button>
-                                </span>
-
-                            </form>
-                        </div>
-                        </td>
-                    </tr>
-                </tbody>
-            
-            </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -536,7 +539,7 @@ const TableaudeBord = {
                     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
                 <div class="toast-body alert-success">
-                    La réservation a été ajoutée ! Réactualisez la page pour voir la nouvelle réservation ! (Soucis réglé dans une prochaine mise à jour)
+                    La réservation a été ajoutée !
                 </div>
             </div>
         </div>
@@ -548,7 +551,7 @@ const TableaudeBord = {
                     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
                 <div class="toast-body alert-success">
-                    La modification a été effectuée! Réactualisez la page pour voir la nouvelle réservation ! (Soucis réglé dans une prochaine mise à jour)
+                    La modification a été effectuée!
                 </div>
             </div>
         </div>
@@ -830,6 +833,20 @@ const TableaudeBord = {
                         this.form_utilisateur_reservation = '';
                         this.form_poste_reservation = '';
                         $('#toast_success_reservation').toast('show');
+
+                        this.reservations.push({
+                            created_at: response.data[1],
+                            date: response.data[2],
+                            heure_debut: response.data[3],
+                            heure_fin: response.data[4],
+                            id: response.data[5],
+                            nom: response.data[6],
+                            poste:response.data[7],
+                            prenom: response.data[8],
+                            utilisateur_id: response.data[9]
+                        })
+
+
                     }
                     if (response.data[0] === 'erreur') {
                         this.erreurs = [];
@@ -889,13 +906,27 @@ const TableaudeBord = {
                         $('#toast_fail_reservation').toast('show');
                     }
                     if (response.data[0] === 'succes') {
+
                         this.form_date_modification = '';
                         this.form_heure_debut_modification = '';
                         this.form_heure_fin_modification = '';
                         this.form_utilisateur_reservation_modification = '';
                         this.form_poste_reservation_modification = '';
-                        
+                        this.modification_reservation = [];
                         $('#toast_success_reservation_modification').toast('show');
+
+                        
+                        this.reservations.filter(res => res.id == id)[0].created_at = response.data[1];
+                        this.reservations.filter(res => res.id == id)[0].date = response.data[2];
+                        this.reservations.filter(res => res.id == id)[0].heure_debut = response.data[3];
+                        this.reservations.filter(res => res.id == id)[0].heure_fin = response.data[4];
+                        this.reservations.filter(res => res.id == id)[0].id = response.data[5];
+                        this.reservations.filter(res => res.id == id)[0].nom = response.data[6];
+                        this.reservations.filter(res => res.id == id)[0].poste = response.data[7];
+                        this.reservations.filter(res => res.id == id)[0].prenom = response.data[8];
+                        this.reservations.filter(res => res.id == id)[0].utilisateur_id = response.data[9];
+                       
+
                     }
                     if (response.data[0] === 'erreur') {
                         this.erreurs = [];
@@ -1000,3 +1031,4 @@ const router = new VueRouter({
 const vue = new Vue({
     router
 }).$mount('#app');
+

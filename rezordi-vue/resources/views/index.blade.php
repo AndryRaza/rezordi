@@ -9,7 +9,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" />
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
-    
+    <!-- CDN pour autocomplete select, Selectize.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.bootstrap4.min.css" integrity="sha512-MMojOrCQrqLg4Iarid2YMYyZ7pzjPeXKRvhW9nZqLo6kPBBTuvNET9DBVWptAo/Q20Fy11EIHM5ig4WlIrJfQw==" crossorigin="anonymous" />
+
+
+
     <title>Rezordi</title>
 </head>
 
@@ -20,7 +24,7 @@
             <a class="navbar-brand" href="/home"><span class="display-5">Rez'ordi</span>- Gestionnaire de réseaux d'ordinateurs</a>
             <span>
                 <form action="/deconnexion" method="POST">
-                @csrf
+                    @csrf
                     <button type="submit" class="btn btn-light">Déconnexion</button>
                 </form>
             </span>
@@ -32,7 +36,7 @@
             <router-view></router-view>
         </div>
     </section>
-    
+
 
 
 
@@ -44,7 +48,8 @@
     <script src="https://unpkg.com/vue-router@2.0.0/dist/vue-router.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="{{asset('js/script.js')}}"></script>
-    
+  
+
 </body>
 
 </html>

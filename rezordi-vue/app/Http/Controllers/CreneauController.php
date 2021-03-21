@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Creneau;
+use App\Utilisateur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator as FacadesValidator;
@@ -24,6 +25,7 @@ class CreneauController extends Controller
                 'utilisateurs.prenom'
             )
             ->join('utilisateurs', 'utilisateurs.id', '=', 'creneaus.utilisateur_id')
+            ->orderBy('date', 'asc')
             ->get();
         return response()->json($creneaux);
     }
@@ -69,8 +71,24 @@ class CreneauController extends Controller
                 'ordinateur_id' => $request->get('poste'),
                 'etat' => 1
             ]);
+
             $new_reservation->save();
-            $tab = ['succes', $new_reservation];
+
+            $utilisateur = Utilisateur::find($request->get('utilisateur'));
+
+
+            $tab = [
+                'succes', 
+                $new_reservation->created_at,
+                $new_reservation->date,
+                $new_reservation->heure_debut,
+                $new_reservation->heure_fin,
+                $new_reservation->id,
+                $utilisateur->nom,
+                $new_reservation->ordinateur_id,
+                $utilisateur->prenom,
+                $new_reservation->utilisateur_id
+            ];
             return $tab;
         }
     }
@@ -85,7 +103,7 @@ class CreneauController extends Controller
         $creneaux = Creneau::where([
             ['date', '=', $date],
             ['ordinateur_id', '=', $poste],
-            ['id','!=',$id]
+            ['id', '!=', $id]
         ])
             ->get();
 
@@ -112,20 +130,34 @@ class CreneauController extends Controller
         } else {
             $creneau = Creneau::find($id);
             $creneau->date = $request->get('date_modification');
-            $creneau->heure_debut = $request->get('heure_debut_modification'). ':00:00';
-            $creneau->heure_fin = $request->get('heure_fin_modification'). ':00:00';
+            $creneau->heure_debut = $request->get('heure_debut_modification') . ':00:00';
+            $creneau->heure_fin = $request->get('heure_fin_modification') . ':00:00';
             $creneau->utilisateur_id = $request->get('utilisateur_modification');
             $creneau->ordinateur_id = $request->get('poste_modification');
             $creneau->save();
-            $tab = ['succes', $creneau];
+
+            $utilisateur = Utilisateur::find($request->get('utilisateur_modification'));
+
+            $tab = [
+                'succes', 
+                $creneau->created_at,
+                $creneau->date,
+                $creneau->heure_debut,
+                $creneau->heure_fin,
+                $creneau->id,
+                $utilisateur->nom,
+                $creneau->ordinateur_id,
+                $utilisateur->prenom,
+                $creneau->utilisateur_id
+            ];
             return $tab;
         }
     }
 
-    public function suppression($id){
+    public function suppression($id)
+    {
         $creneau = Creneau::find($id);
         $creneau->delete();
         return 'ok';
     }
-
 }
