@@ -400,7 +400,7 @@ const TableaudeBord = {
                             <th></th>
                             <th></th>
                         </thead>
-
+            
                         <tbody v-for="reservation,id in reservations_func" v-bind:key="reservation.id">
                             <tr> 
                                 <td>{{reservation.id}} </td>
