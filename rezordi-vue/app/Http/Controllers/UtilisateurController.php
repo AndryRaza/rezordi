@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Creneau;
 use App\Utilisateur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -72,6 +73,10 @@ class UtilisateurController extends Controller
     {
         $user = Utilisateur::find($id);
         $user->delete();
+
+        $creneaux = Creneau::where('utilisateur_id','=',$id);
+        $creneaux->delete();
+
         return 'ok';
     }
 }
