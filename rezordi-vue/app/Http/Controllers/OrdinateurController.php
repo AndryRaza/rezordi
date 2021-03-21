@@ -15,9 +15,9 @@ class OrdinateurController extends Controller
     }
 
     public function add_ordinateur(){
-        $ordinateur = new Ordinateur(['etat' => 1, 'en_marche' => 0]);
+        $ordinateur = new Ordinateur(['etat' => 1, 'en_marche' => '0']);
         $ordinateur->save();
-        return $ordinateur;
+        return response()->json($ordinateur);
     }
 
     public function suppression($id){
@@ -35,14 +35,14 @@ class OrdinateurController extends Controller
         $ordinateur = Ordinateur::find($id);
         $p = $request->get('en_marche');
 
-        if ($p === 1)
+        if ($p === '1')
         {
-            $power = 0;
+            $power = '0';
         }
     
-        if ($p === 0)
+        if ($p === '0')
         {
-            $power = 1;
+            $power = '1';
         }
 
         $ordinateur->en_marche = $power;

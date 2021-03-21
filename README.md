@@ -1,5 +1,13 @@
 # Rezordi - Application de Gestion d'attribution d'ordinateurs
 
+rezordi.razafin-andry.fr
+
+## Deux versions
+
+Il existe deux versions de cette application :
+- une version only Laravel qui n'est pas en ligne, et il manque la partie connexion et des middlewares pour protéger les chemins
+- une version VueJS & Laravel, en ligne et à peu près complète
+
 ## Objectif 
 
 Une application sécurisée qui permet de gérer l'attribution des postes informatiques à des visiteurs d'un centre culturel sur les horaires d'ouvertures. 

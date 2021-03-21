@@ -179,7 +179,7 @@ const TableaudeBord = {
                 >
                     <h2>Poste n°{{poste.id}}</h2>
 
-                    <span v-if="poste.en_marche">
+                    <span v-if="poste.en_marche == '1' ">
                         <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" fill="red" class="bi bi-laptop img-fluid"
                         viewBox="0 0 16 16">
                         <path
@@ -755,7 +755,7 @@ const TableaudeBord = {
             axios
                 .post('/ajout_ordinateur')
                 .then(response => {
-                    this.postes.push(response.data);
+                    this.postes.push(response.data );
                     $('#toast_success_ordinateur').toast('show');
                 })
                 .catch(error => {
