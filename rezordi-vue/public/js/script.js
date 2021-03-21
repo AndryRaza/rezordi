@@ -1,7 +1,26 @@
 const TableaudeBord = {
     template: `
     <section>
-        <div class="d-flex justify-content-center align-items-center mb-4">
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="accueil-tab" data-bs-toggle="tab" data-bs-target="#accueil" type="button" role="tab"
+                aria-controls="accueil" aria-selected="true">Accueil</button>
+            </li>
+            <li class="nav-item" role="presentation">
+            <button class="nav-link" id="utilisateurs-tab" data-bs-toggle="tab" data-bs-target="#utilisateurs" type="button" role="tab"
+                aria-controls="utilisateurs" aria-selected="false">Utilisateurs</button>
+            </li>
+            <li class="nav-item" role="presentation">
+            <button class="nav-link" id="reservations-tab" data-bs-toggle="tab" data-bs-target="#reservations" type="button" role="tab"
+                aria-controls="reservations" aria-selected="false">Réservations</button>
+            </li>
+        </ul>
+
+
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active border border-1 border-secondary rounded py-2" id="accueil" role="tabpanel" aria-labelledby="accueil-tab">
+            <div class="d-flex justify-content-center align-items-center mb-4">
 
             <button v-on:click="ajout_utilisateur" class="btn border border-3 border-dark rounded m-auto" > Ajouter un utilisateur <br /> 
                 <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
@@ -22,7 +41,7 @@ const TableaudeBord = {
             <form class="w-50 border border-2 border-secondary p-3 rounded">
                 <h2> Formulaire d'ajout d'un utilisateur </h2>
                 <div class="mb-3 form-floating">
-                    <input v-model="form_nom" type="text" class="form-control" name="nom" id="nom" placeholder="Nom " required pattern="[A-Za-z]+" minlength="3" maxlength="255">
+                    <input v-model="form_nom" type="text" class="form-control" name="nom" id="nom" placeholder="Nom" >
                     <label class="form-label" for="nom">Nom*</label>
                     <div v-for="erreur in erreurs">
                         <span v-if="erreur.nom" class="text-danger">
@@ -32,7 +51,7 @@ const TableaudeBord = {
                 </div>
 
                 <div class="mb-3 form-floating">
-                    <input v-model="form_prenom" type="text" class="form-control" name="prenom" id="prenom" placeholder="Prénom" required pattern="[A-Za-z-]+" minlength="3" maxlength="255">
+                    <input v-model="form_prenom" type="text" class="form-control" name="prenom" id="prenom" placeholder="Prénom"  >
                     <label class="form-label" for="prenom">Prénom*</label>
                     <div v-for="erreur in erreurs">
                         <span v-if="erreur.prenom" class="text-danger">
@@ -180,6 +199,12 @@ const TableaudeBord = {
 
                     <p class="text-ordi">
                         <span class="d-flex justify-content-around mb-2">
+                            <button v-on:click="eteindre_ordinateur(poste.id,poste.en_marche)" class="bg-transparent border border-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-power pb-2" viewBox="0 0 16 16">
+                                    <path d="M7.5 1v7h1V1h-1z"/>
+                                    <path d="M3 8.812a4.999 4.999 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812z"/>
+                                </svg>
+                            </button>
                             <button v-on:click="suppression_ordinateur(poste.id)" class="bg-transparent border border-0">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-trash pb-2"
                                 viewBox="0 0 16 16">
@@ -226,9 +251,13 @@ const TableaudeBord = {
                 </div>
 
             </div>
-  
+            
+            </div>
+
+            <div class="tab-pane fade border border-1 border-secondary rounded py-2 px-1" id="utilisateurs" role="tabpanel" aria-labelledby="utilisateurs-tab">
+
                 <h2>Liste des utilisateurs</h2>
-                
+                    
                 <div class="row row-cols-2 my-3">
 
                     <div class="col d-flex justify-content-start">
@@ -329,19 +358,26 @@ const TableaudeBord = {
                     </tbody>
                 </table>
 
-  
+
+            </div>
+
+            <div class="tab-pane fade border border-1 border-secondary rounded py-2 px-1" id="reservations" role="tabpanel" aria-labelledby="reservations-tab">
             <h2>Liste des réservations</h2>
 
             <div class="row row-cols-2 my-3">
 
                 <div class="col d-flex justify-content-start">
-                <label for="select" class="form-label mt-1 mx-3">Affichage : </label>
-                    <select v-model="affichage_reservation" class="form-control w-50 h-100" id="select">
+                    <label for="select" class="form-label mt-1 mx-2">Affichage : </label>
+                    <select v-model="affichage_reservation" class="form-control w-50 h-100 mx-2" id="select">
                         <option v-bind:value="reservations.length">Tout montrer</option>
                         <option value="10">10</option>
                         <option value="50">50</option>
                         <option value="100">100</option>
                     </select>
+
+                    <input v-model="today" type="checkbox" class="btn-check mx-2" id="today" autocomplete="off">
+                    <label class="btn btn-outline-secondary" for="today">Aujourd'hui</label>
+
                 </div>
 
                 <div class="col d-flex justify-content-end">
@@ -457,6 +493,16 @@ const TableaudeBord = {
                 </tbody>
             
             </table>
+            </div>
+        </div>
+
+
+        
+  
+               
+
+  
+           
   
 
         <div class="position-fixed bottom-0 end-0 p-3 " style="z-index: 5">
@@ -575,15 +621,16 @@ const TableaudeBord = {
         return {
             postes: [],
             utilisateurs: [],
-            reservations : [],
+            reservations: [],
             details: [],
             modification_reservation: [],
             erreurs: [],
             erreur_telephone: null,
             affichage: 10,
-            affichage_reservation:10,
+            affichage_reservation: 10,
             searchUser: '',
             searchReservation: '',
+            today: false,
 
             form_utilisateur: false,
             form_reservation: false,
@@ -605,10 +652,10 @@ const TableaudeBord = {
             form_poste_reservation: '',
 
             form_date_modification: '',
-            form_heure_debut_modification : '',
+            form_heure_debut_modification: '',
             form_heure_fin_modification: '',
             form_utilisateur_reservation_modification: '',
-            form_poste_reservation_modification : ''
+            form_poste_reservation_modification: ''
             // Details : Array pour mettre les id qu'on souhaite voir en détails (utilisateurs)
             //Affichage : Le nbre d'utilisateurs qu'on souhaite afficher
             //searchUser: L'utilisateur qu'on souhaite rechercher
@@ -626,11 +673,28 @@ const TableaudeBord = {
         postes_func() {
             return this.postes;
         },
-        reservations_func(){
+        reservations_func() {
+
+            var date = new Date();
+            date_year = date.getFullYear();
+            date_month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1).toString() : date.getMonth() + 1;
+            date_day = date.getDate() < 10 ? "0" + (date.getDate()).toString() : date.getDate();
+
+            date_str = date_year + "-" + date_month + "-" + date_day;
+
+            if (this.today) {
+
+                let tab = this.reservations.filter((reservation) => {
+                    return ((reservation.nom.toLowerCase().includes(this.searchReservation.toLowerCase()) || reservation.prenom.toLowerCase().includes(this.searchReservation.toLowerCase())) && reservation.date.toLowerCase().includes(date_str))
+                })
+                return tab.slice(0, this.affichage_reservation);
+            }
+
+
             let tab = this.reservations.filter((reservation) => {
-                return (reservation.nom.toLowerCase().includes(this.searchReservation.toLowerCase()) ||  reservation.prenom.toLowerCase().includes(this.searchReservation.toLowerCase()) || reservation.date.toLowerCase().includes(this.searchReservation.toLowerCase()))
+                return (reservation.nom.toLowerCase().includes(this.searchReservation.toLowerCase()) || reservation.prenom.toLowerCase().includes(this.searchReservation.toLowerCase()) || reservation.date.toLowerCase().includes(this.searchReservation.toLowerCase()))
             })
-            return tab.slice(0,this.affichage_reservation);
+            return tab.slice(0, this.affichage_reservation);
         },
         heures() {
             let heures = [];
@@ -646,14 +710,12 @@ const TableaudeBord = {
     methods: {
         openDetail(id) {
 
-            if (this.details === [])
-            {
-                this.details.push(id); 
+            if (this.details === []) {
+                this.details.push(id);
             }
 
-    
-            if (this.details.includes(id))
-            {
+
+            if (this.details.includes(id)) {
                 this.details = [];
             }
 
@@ -663,21 +725,19 @@ const TableaudeBord = {
             }
 
         },
-        openModificationReservation(id){
+        openModificationReservation(id) {
 
             let tab = this.reservations_func.filter(res => res.id == id);
-            this.form_heure_debut_modification = tab[0].heure_debut.substr(0,2);
-            this.form_heure_fin_modification = tab[0].heure_fin.substr(0,2);
+            this.form_heure_debut_modification = tab[0].heure_debut.substr(0, 2);
+            this.form_heure_fin_modification = tab[0].heure_fin.substr(0, 2);
 
             //Si aucune modification n'est ouverte c'est facile on push l'id pour ouvrir
-            if (this.modification_reservation === [])
-            {
-                this.modification_reservation.push(id); 
+            if (this.modification_reservation === []) {
+                this.modification_reservation.push(id);
             }
 
             //Si on appuie deux fois sur le même bouton modifier, on va fermer la fenetre donc tableau vide
-            if (this.modification_reservation.includes(id))
-            {
+            if (this.modification_reservation.includes(id)) {
                 this.modification_reservation = [];
             }
             //Sinon si on appuie sur un autre bouton, on remet le tableau vide et on push le nouveau id, la nouvelle fenêtre
@@ -759,8 +819,7 @@ const TableaudeBord = {
                     poste: this.form_poste_reservation
                 })
                 .then(response => {
-                    if (response.data === 'erreur_creneau_pris')
-                    {
+                    if (response.data === 'erreur_creneau_pris') {
                         this.form_date = '';
                         $('#toast_fail_reservation').toast('show');
                     }
@@ -781,114 +840,123 @@ const TableaudeBord = {
                     console.log(error);
                 })
         },
-        envoi_utilisateur_modification(id){
+        envoi_utilisateur_modification(id) {
             axios
-            .post('/modification_utilisateur/'+id, {
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                nom_modification : this.form_nom_modification,
-                prenom_modification : this.form_prenom_modification,
-                email_modification : this.form_email_modification,
-                telephone_modification : this.form_telephone_modification,
-            })  
-            .then(response => {
-                if (response.data[0] === 'succes') {
-                    this.form_nom_modification = '';
-                    this.form_prenom_modification = '';
-                    this.form_email_modification = '';
-                    this.form_telephone_modification = '';
-                    $('#toast_success_utilisateur_modification').toast('show');
-                    this.details = [];
-                    this.erreurs = [];
-                }
-                if (response.data[0] === 'erreur') {
-                    this.erreurs = [];
-                    this.erreurs.push(JSON.parse(response.data[1]));
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            })
-            
+                .post('/modification_utilisateur/' + id, {
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    nom_modification: this.form_nom_modification,
+                    prenom_modification: this.form_prenom_modification,
+                    email_modification: this.form_email_modification,
+                    telephone_modification: this.form_telephone_modification,
+                })
+                .then(response => {
+                    if (response.data[0] === 'succes') {
+                        this.form_nom_modification = '';
+                        this.form_prenom_modification = '';
+                        this.form_email_modification = '';
+                        this.form_telephone_modification = '';
+                        $('#toast_success_utilisateur_modification').toast('show');
+                        this.details = [];
+                        this.erreurs = [];
+                    }
+                    if (response.data[0] === 'erreur') {
+                        this.erreurs = [];
+                        this.erreurs.push(JSON.parse(response.data[1]));
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+
         },
 
-        envoi_reservation_modification(id){
+        envoi_reservation_modification(id) {
             axios
-            .post('/modification_reservation/'+id, {
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                date_modification: this.form_date_modification,
-                heure_debut_modification: this.form_heure_debut_modification,
-                heure_fin_modification: this.form_heure_fin_modification,
-                utilisateur_modification: this.form_utilisateur_reservation_modification,
-                poste_modification: this.form_poste_reservation_modification
-            })
-            .then(response => {
-                if (response.data === 'erreur_creneau_pris')
-                {
-                    $('#toast_fail_reservation').toast('show');
-                }
-                if (response.data[0] === 'succes') {
-                    this.form_date_modification = '';
-                    this.form_heure_debut_modification = '';
-                    this.form_heure_fin_modification = '';
-                    this.form_utilisateur_reservation_modification = '';
-                    this.form_poste_reservation_modification = '';
-                    $('#toast_success_reservation_modification').toast('show');
-                }
-                if (response.data[0] === 'erreur') {
-                    this.erreurs = [];
-                    this.erreurs.push(JSON.parse(response.data[1]));
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            })
+                .post('/modification_reservation/' + id, {
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    date_modification: this.form_date_modification,
+                    heure_debut_modification: this.form_heure_debut_modification,
+                    heure_fin_modification: this.form_heure_fin_modification,
+                    utilisateur_modification: this.form_utilisateur_reservation_modification,
+                    poste_modification: this.form_poste_reservation_modification
+                })
+                .then(response => {
+                    if (response.data === 'erreur_creneau_pris') {
+                        $('#toast_fail_reservation').toast('show');
+                    }
+                    if (response.data[0] === 'succes') {
+                        this.form_date_modification = '';
+                        this.form_heure_debut_modification = '';
+                        this.form_heure_fin_modification = '';
+                        this.form_utilisateur_reservation_modification = '';
+                        this.form_poste_reservation_modification = '';
+                        
+                        $('#toast_success_reservation_modification').toast('show');
+                    }
+                    if (response.data[0] === 'erreur') {
+                        this.erreurs = [];
+                        this.erreurs.push(JSON.parse(response.data[1]));
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
         },
-        suppression_utilisateur(id){
+        suppression_utilisateur(id) {
             axios
-            .post('/delete_user/'+id)
-            .then(response => {
-                if (response.data === 'ok')
-                {
-                    this.utilisateurs = this.utilisateurs.filter(res => res.id != id);
-                    $('#toast_suppression_utilisateur').toast('show');
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            })
+                .post('/delete_user/' + id)
+                .then(response => {
+                    if (response.data === 'ok') {
+                        this.utilisateurs = this.utilisateurs.filter(res => res.id != id);
+                        $('#toast_suppression_utilisateur').toast('show');
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
         },
-        suppression_reservation(id){
+        suppression_reservation(id) {
             axios
-            .post('/delete_reservation/'+id)
-            .then(response => {
-                if (response.data === 'ok')
-                {
-                    this.reservations = this.reservations.filter(res => res.id != id);
-                    $('#toast_suppression_creneau').toast('show');
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            })
+                .post('/delete_reservation/' + id)
+                .then(response => {
+                    if (response.data === 'ok') {
+                        this.reservations = this.reservations.filter(res => res.id != id);
+                        $('#toast_suppression_creneau').toast('show');
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
         },
-        suppression_ordinateur(id){
+        suppression_ordinateur(id) {
             axios
-            .post('/delete_ordinateur/'+id)
-            .then(response => {
-                if (response.data === 'ok')
-                {
-                    this.postes = this.postes.filter(res => res.id != id);
-                    this.reservations = this.reservations.filter(res => res.poste != id);
-                    $('#toast_suppression_ordinateur').toast('show');
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            })
+                .post('/delete_ordinateur/' + id)
+                .then(response => {
+                    if (response.data === 'ok') {
+                        this.postes = this.postes.filter(res => res.id != id);
+                        this.reservations = this.reservations.filter(res => res.poste != id);
+                        $('#toast_suppression_ordinateur').toast('show');
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        eteindre_ordinateur(id, p) {
+            axios
+                .post('/power_ordinateur/' + id,
+                    {
+                        en_marche: p
+                    })
+                .then(response => {
+                    if (response.data[0] === 'ok'){
+                        this.postes.filter(res => res.id == id)[0].en_marche = response.data[1];
+                    }
+                })
         }
     },
 

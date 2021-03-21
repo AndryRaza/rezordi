@@ -35,7 +35,7 @@ Route::group([
     
     Route::post('/ajout_ordinateur','OrdinateurController@add_ordinateur');
     Route::post('/delete_ordinateur/{id}','OrdinateurController@suppression');
-    
+    Route::post('/power_ordinateur/{id}','OrdinateurController@power');
     
     Route::post('/store_user','UtilisateurController@store_user');
     Route::post('/modification_utilisateur/{id}','UtilisateurController@modification_user');

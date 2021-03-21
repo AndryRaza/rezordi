@@ -15,23 +15,24 @@
 
 <body>
 
-    <nav class="navbar navbar-light bg-light">
+    <nav class="navbar navbar-dark bg-dark fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Rez'ordi</a>
+            <a class="navbar-brand" href="/home"><span class="display-5">Rez'ordi</span>- Gestionnaire de réseaux d'ordinateurs</a>
             <span>
                 <form action="/deconnexion" method="POST">
                 @csrf
-                    <button type="submit" class="btn btn-primary">Déconnexion</button>
+                    <button type="submit" class="btn btn-light">Déconnexion</button>
                 </form>
             </span>
         </div>
     </nav>
 
-    <section class="container pt-3">
+    <section class="container py-3" style="margin-top:80px;">
         <div id="app">
             <router-view></router-view>
         </div>
     </section>
+    
 
 
 

@@ -29,5 +29,26 @@ class OrdinateurController extends Controller
 
         return 'ok';
     }
+
+    public function power(Request $request, $id)
+    {
+        $ordinateur = Ordinateur::find($id);
+        $p = $request->get('en_marche');
+
+        if ($p === 1)
+        {
+            $power = 0;
+        }
+    
+        if ($p === 0)
+        {
+            $power = 1;
+        }
+
+        $ordinateur->en_marche = $power;
+        $ordinateur->save();
+
+        return ['ok',$power];
+    }
    
 }
