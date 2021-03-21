@@ -22,7 +22,7 @@ class UtilisateurController extends Controller
         $validator = FacadesValidator::make($request->all(), [
             'nom' => 'required|min:3|max:255|regex:/^[A-Za-z]+$/',
             'prenom' => 'required|min:3|max:255|regex:/^[A-Za-z - é è ]+$/',
-            'email'=> 'nullable|email',
+            'email'=> 'nullable|email|unique:utilisateurs',
             'telephone'=>'nullable|regex:/^[0-9 - () ]+$/'
         ]);
 
